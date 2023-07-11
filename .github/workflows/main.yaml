@@ -25,6 +25,7 @@ jobs:
           name: TFLint
           path: tflint-output.json
         if: always()                        # what is this for?
+        continue-on-error: true
 
   test:
     runs-on: ubuntu-20.04
