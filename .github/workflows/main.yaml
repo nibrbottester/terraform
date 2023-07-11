@@ -28,7 +28,7 @@ jobs:
 
   test:
     runs-on: ubuntu-20.04
-    needs: build
+    needs: tflint
     steps:
       - run: echo "This is a test step"
 
