@@ -18,7 +18,7 @@ jobs:
           tflint_version: latest
 
       - name: Run TFLint
-        run: tflint -f json aws > tflint-output.json
+        run: tflint -f json --chdir aws > tflint-output.json
 
       - uses: actions/upload-artifact@v2
         with:
