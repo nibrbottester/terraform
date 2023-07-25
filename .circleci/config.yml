@@ -1,15 +1,15 @@
 jobs:
-  terrascan:
+  tfsec:
     machine: true
     steps:
       - checkout
 
-      - run: 
-          command: docker run --rm -v $(pwd):/src accurics/terrascan scan -t aws -d /src/aws -o json | tee terrascan-output.json || true
+      - run:
+          command: docker run --rm -v $(pwd):/src aquasec/tfsec /src -f json | tee tfsec-output.json || true
 
       - store_artifacts:
-          path: terrascan-output.json
-          destination: terrascan-artifact
+          path: tfsec-output.json
+          destination: tfsec-artifact
           when: always
 
   test:
@@ -38,10 +38,10 @@ workflows:
   version: 2
   terraform:
     jobs:
-      - terrascan
+      - tfsec
       - test:
           requires:
-            - terrascan
+            - tfsec
       - integration:
           requires:
             - test
