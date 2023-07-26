@@ -6,29 +6,25 @@ on:
       - main
 
 jobs:
-  tflint:
+  terrascan:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: terraform-linters/setup-tflint@v1
-        name: Setup TFLint
+      - name: Run Terrascan
+        id: terrascan
+        uses: accurics/terrascan-action@v1
         with:
-          tflint_version: latest
-
-      - name: Run TFLint
-        run: tflint -f json --chdir aws > tflint-output.json
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: TFLint
-          path: tflint-output.json
-        if: always()                        # what is this for?
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'aws'
+          only_warn: true
+          iac_dir: 'aws'
 
   test:
     runs-on: ubuntu-20.04
-    needs: tflint
+    needs: terrascan
     steps:
       - run: echo "This is a test step"
 
@@ -45,3 +41,4 @@ jobs:
     needs: integration
     steps:
       - run: echo "This is a deploy step"
+
